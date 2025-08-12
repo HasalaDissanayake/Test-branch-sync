@@ -3,14 +3,13 @@
 # Configurable variables
 SOURCE_BRANCH="dummy"
 TARGET_BRANCH="main"
-REMOTE="origin"  # Your Bitbucket remote name
-COMMIT_MESSAGE="Update main with selected released files from ${SOURCE_BRANCH}"
+REMOTE="origin"
+COMMIT_MESSAGE="Updating master with released files from ${SOURCE_BRANCH}"
 
 # Check if file paths are provided as arguments
 if [ $# -eq 0 ]; then
   echo "Error: No file paths provided."
-  echo "Usage: $0 <file_path1> <file_path2> ..."
-  echo "Example: $0 origination/test.js config/fd_certificate.js"
+  echo "Example: $0 workflows/origination/HNB_I_dormant_activation_1.4.js config/report-generator/report_templates/fd_certificate.js"
   exit 1
 fi
 
