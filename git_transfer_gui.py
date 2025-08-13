@@ -113,24 +113,76 @@ def get_branches():
 # ---------------- GUI Setup ----------------
 root = tk.Tk()
 root.title("Git File Transfer Tool")
+root.geometry("600x600")
+root.configure(bg="#f4faff")  # very light bluish background
 
+# ---------- Modern Theme ----------
+style = ttk.Style()
+style.theme_use("clam")
+
+# General widget styling
+style.configure("TLabel", background="#f4faff", font=("Segoe UI", 11))
+style.configure("TButton",
+                font=("Segoe UI", 11, "bold"),
+                background="#cce7ff",
+                foreground="#003366",
+                borderwidth=1,
+                focusthickness=3,
+                focuscolor="none",
+                padding=8)
+style.map("TButton",
+          background=[("active", "#99d0ff")])
+
+style.configure("TCombobox",
+                fieldbackground="#ffffff",
+                background="#e6f3ff",
+                padding=5)
+
+# ---------- Layout ----------
 branches = get_branches()
 
-ttk.Label(root, text="Source Branch:").grid(row=0, column=0, sticky="w")
-src_branch = ttk.Combobox(root, values=branches, width=30)
-src_branch.grid(row=0, column=1)
+# Title
+ttk.Label(root, text="📂 Git File Transfer Tool", font=("Segoe UI", 18, "bold"), background="#f4faff").grid(
+    row=0, column=0, columnspan=2, pady=(15, 25))
 
-ttk.Label(root, text="Target Branch:").grid(row=1, column=0, sticky="w")
-tgt_branch = ttk.Combobox(root, values=branches, width=30)
-tgt_branch.grid(row=1, column=1)
+# Source branch
+ttk.Label(root, text="Source Branch:").grid(
+    row=1, column=0, sticky="e", padx=10, pady=5)
+src_branch = ttk.Combobox(root, values=branches, width=40, state="readonly")
+src_branch.set(branches[0])
+src_branch.grid(row=1, column=1, pady=5, sticky="w")
 
-ttk.Button(root, text="Select Files", command=pick_files).grid(
-    row=2, column=0, columnspan=2, pady=5)
+# Target branch
+ttk.Label(root, text="Target Branch:").grid(
+    row=2, column=0, sticky="e", padx=10, pady=5)
+tgt_branch = ttk.Combobox(root, values=branches, width=40, state="readonly")
+tgt_branch.set(branches[1])
+tgt_branch.grid(row=2, column=1, pady=5, sticky="w")
 
-file_list = tk.Listbox(root, width=60, height=10, selectmode=tk.MULTIPLE)
-file_list.grid(row=3, column=0, columnspan=2, pady=5)
+# File selection button
+ttk.Button(root, text="📁 Select Files", command=pick_files).grid(
+    row=3, column=0, columnspan=2, pady=10)
 
-ttk.Button(root, text="Transfer", command=transfer_files).grid(
-    row=4, column=0, columnspan=2, pady=10)
+# File list with scrollbar
+frame = ttk.Frame(root)
+frame.grid(row=4, column=0, columnspan=2, sticky="nsew", padx=10, pady=5)
+
+scrollbar = ttk.Scrollbar(frame)
+scrollbar.pack(side="right", fill="y")
+
+file_list = tk.Listbox(frame, width=80, height=15, selectmode=tk.MULTIPLE,
+                       yscrollcommand=scrollbar.set, font=("Consolas", 10))
+file_list.pack(side="left", fill="both", expand=True)
+scrollbar.config(command=file_list.yview)
+
+# Transfer button
+ttk.Button(root, text="🚀 Transfer Files", command=transfer_files).grid(
+    row=5, column=0, columnspan=2, pady=20)
+
+# Status bar
+status_label = ttk.Label(root, text="Ready", relief="sunken",
+                         anchor="w", background="#e6f3ff", font=("Segoe UI", 10))
+status_label.grid(row=6, column=0, columnspan=2,
+                  sticky="we", padx=5, pady=(0, 5))
 
 root.mainloop()
