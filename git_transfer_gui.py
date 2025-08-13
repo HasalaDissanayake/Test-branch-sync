@@ -78,7 +78,7 @@ def transfer_files():
                 "Warning", "These files were skipped:\n" + "\n".join(invalid_files))
 
         # Commit & push
-        commit_msg = f"Updating master with released files from {source_branch}"
+        commit_msg = f"Updating {target_branch} with released files from {source_branch}"
         run_git_cmd(["commit", "-m", commit_msg])
         run_git_cmd(["push", "origin", target_branch])
 
